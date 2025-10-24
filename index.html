@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U.S. Citizenship Civics Quiz</title>
+    <style>
+        /* CSS for Styling the Quiz */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #004085;
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #212529;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #e2f0ff;
+            border-color: #007bff;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .options input:checked + label {
+            border: 2px solid #007bff;
+            background-color: #e2f0ff;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: none; /* Hidden by default */
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px solid #004085;
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+            background-color: #e2f0ff;
+        }
+
+        #results h2 {
+            margin-top: 0;
+            color: #004085;
+        }
+
+        #results p {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .pass {
+            color: #28a745;
+            font-size: 1.4em;
+        }
+
+        .fail {
+            color: #dc3545;
+            font-size: 1.4em;
+        }
+
+        .retake-btn {
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .retake-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>New U.S. Citizenship Civics Quiz (10 Questions)</h1>
+        <p>Test your knowledge with 10 questions based on the revised U.S. citizenship civics test. **Note:** The real exam requires oral answers, but this is a multiple-choice practice tool.</p>
+        <p>Passing Score: N/A for this short version, but aim for a perfect score! The actual test requires 12/20 correct.</p>
+
+        <form id="quizForm">
+            </form>
+
+        <button class="submit-btn" id="submitButton">Submit Answers</button>
+
+        <div id="results">
+            <h2>Quiz Results</h2>
+            <p>Your Score: <span id="scoreText"></span></p>
+            <p id="passFailText"></p>
+            <button class="retake-btn" onclick="location.reload()">Retake Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Quiz Logic
+
+        const quizData = [
+            {
+                question: "1 of 10: Who wrote the Declaration of Independence?",
+                options: ["Benjamin Franklin", "John Adams", "Thomas Jefferson", "George Washington"],
+                answer: "Thomas Jefferson",
+                correctIndex: 2
+            },
+            {
+                question: "2 of 10: Name a power that is only for the federal government.",
+                options: ["Print paper money", "Declare war", "Make treaties", "All of the above"],
+                answer: "All of the above",
+                correctIndex: 3
+            },
+            {
+                question: "3 of 10: What amendment says all persons born or naturalized in the United States, and subject to the jurisdiction thereof, are U.S. citizens?",
+                options: ["Second Amendment", "Sixth Amendment", "12th Amendment", "14th Amendment"],
+                answer: "14th Amendment",
+                correctIndex: 3
+            },
+            {
+                question: "4 of 10: The American Revolution had many important events. Name one.",
+                options: ["The Battle of Gettysburg", "The Battle of the Bulge", "The Battle of Yorktown", "The Battle of Plattsburgh"],
+                answer: "The Battle of Yorktown",
+                correctIndex: 2
+            },
+            {
+                question: "5 of 10: Why were the Federalist Papers important?",
+                options: ["They supported passing the Constitution", "They stoked tensions leading to the Civil War", "They inspired Americans to break from the British crown", "They inspired the Declaration of Independence"],
+                answer: "They supported passing the Constitution",
+                correctIndex: 0
+            },
+            {
+                question: "6 of 10: James Madison is famous for many things. Name one.",
+                options: ["First secretary of state", "Helped draft the Declaration of Independence", "Founded the University of Virginia", "President during the War of 1812"],
+                answer: "President during the War of 1812",
+                correctIndex: 3
+            },
+            {
+                question: "7 of 10: When did all women get the right to vote?",
+                options: ["1919", "1920", "1925", "1931"],
+                answer: "1920",
+                correctIndex: 1
+            },
+            {
+                question: "8 of 10: Why did the United States enter the Persian Gulf War?",
+                options: ["To defend the U.S. from Iraqi threats", "To secure oil in Kuwait", "To force the Iraqi military from Kuwait", "To defeat Saddam Hussein"],
+                answer: "To force the Iraqi military from Kuwait",
+                correctIndex: 2
+            },
+            {
+                question: "9 of 10: Name one example of an American innovation.",
+                options: ["The lightbulb", "The stethoscope", "The computer", "The electromagnet"],
+                answer: "The lightbulb", // The provided answer list (for the actual test) often lists "The lightbulb" or "The airplane (Wright Brothers)" or "Vaccines." The article mentions the lightbulb photo, so we'll use one of the options.
+                correctIndex: 0
+            },
+            {
+                question: "10 of 10: What is Memorial Day?",
+                options: ["A holiday to honor military history", "A holiday to honor soldiers who died in military service", "A holiday to mark the beginning of summer", "A holiday to honor veterans"],
+                answer: "A holiday to honor soldiers who died in military service",
+                correctIndex: 1
+            }
+        ];
+
+        const quizForm = document.getElementById('quizForm');
+        const submitButton = document.getElementById('submitButton');
+        const resultsDiv = document.getElementById('results');
+        const scoreText = document.getElementById('scoreText');
+        const passFailText = document.getElementById('passFailText');
+
+        /**
+         * Renders the quiz questions to the form element.
+         */
+        function renderQuiz() {
+            quizData.forEach((q, index) => {
+                const qCard = document.createElement('div');
+                qCard.classList.add('question-card');
+
+                const qText = document.createElement('p');
+                qText.classList.add('question-text');
+                qText.textContent = q.question;
+                qCard.appendChild(qText);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                q.options.forEach((option, optIndex) => {
+                    const optionId = `q${index}-opt${optIndex}`;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.id = optionId;
+                    input.name = `question${index}`;
+                    input.value = option;
+
+                    const label = document.createElement('label');
+                    label.setAttribute('for', optionId);
+                    label.textContent = option;
+                    
+                    optionsDiv.appendChild(input);
+                    optionsDiv.appendChild(label);
+                });
+                
+                // Feedback element (hidden until checking answers)
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.classList.add('feedback');
+                feedbackDiv.id = `feedback-${index}`;
+
+
+                qCard.appendChild(optionsDiv);
+                qCard.appendChild(feedbackDiv);
+                quizForm.appendChild(qCard);
+            });
+        }
+
+        /**
+         * Calculates score, displays results, and shows feedback on each question.
+         */
+        function checkAnswers(event) {
+            event.preventDefault();
+            let score = 0;
+            const totalQuestions = quizData.length;
+
+            quizData.forEach((q, index) => {
+                const questionName = `question${index}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const feedbackElement = document.getElementById(`feedback-${index}`);
+                const qCard = feedbackElement.closest('.question-card');
+                
+                // Clear previous feedback classes
+                feedbackElement.classList.remove('correct', 'incorrect');
+                qCard.style.backgroundColor = '#fff';
+
+                if (selectedOption) {
+                    const userAnswer = selectedOption.value;
+                    const isCorrect = (userAnswer === q.answer);
+
+                    feedbackElement.style.display = 'block';
+
+                    if (isCorrect) {
+                        score++;
+                        feedbackElement.textContent = "✅ Correct!";
+                        feedbackElement.classList.add('correct');
+                        qCard.style.backgroundColor = '#d4edda';
+                    } else {
+                        feedbackElement.textContent = `❌ Incorrect. The correct answer is: ${q.answer}`;
+                        feedbackElement.classList.add('incorrect');
+                        qCard.style.backgroundColor = '#f8d7da';
+                    }
+                } else {
+                    // Handle unselected questions
+                    feedbackElement.textContent = `⚠️ You didn't answer. The correct answer is: ${q.answer}`;
+                    feedbackElement.classList.add('incorrect'); // Treat as incorrect for grading purpose
+                    feedbackElement.style.display = 'block';
+                    qCard.style.backgroundColor = '#f8d7da';
+                }
+            });
+
+            // Display overall results
+            scoreText.textContent = `${score} out of ${totalQuestions}`;
+            
+            // Set simple pass/fail based on a high arbitrary score for this short quiz
+            if (score >= 8) {
+                passFailText.innerHTML = '<span class="pass">Excellent job! You are well-prepared!</span>';
+            } else if (score >= 5) {
+                 passFailText.innerHTML = '<span class="pass">Good start! Keep studying!</span>';
+            } else {
+                passFailText.innerHTML = '<span class="fail">You should review the material and try again.</span>';
+            }
+
+            resultsDiv.style.display = 'block';
+            submitButton.disabled = true;
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize the quiz
+        renderQuiz();
+        submitButton.addEventListener('click', checkAnswers);
+
+    </script>
+
+</body>
+</html>
